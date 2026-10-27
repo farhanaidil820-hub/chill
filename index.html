@@ -5,7 +5,7 @@
 <title>VibeCheck Chat</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ---------- Tailwind (Play CDN) ---------- -->
+<!-- ---------- Tailwind (Play CDN – JIT) ---------- -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
@@ -30,7 +30,7 @@
 <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
 
 <style>
-  /* ----- glass‑morphism helpers ----- */
+  /* ----- Glass‑morphism helper ----- */
   .glass {
     background: rgba(255,255,255,0.07);
     border: 1px solid rgba(255,255,255,0.15);
@@ -57,27 +57,31 @@
       <span class="text-2xl font-semibold">Chloe</span>
       <span class="absolute -bottom-1 left-0 w-2 h-2 bg-green-500 rounded-full border border-gray-800"></span>
     </div>
-    <span id="moodBadge" class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-purple-600/30 text-purple-200">
+    <span id="moodBadge"
+          class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-purple-600/30 text-purple-200">
       Mood: <span id="moodText">Chill</span>
     </span>
   </div>
-  <button id="openSettingsBtn" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+  <button id="openSettingsBtn"
+          class="p-2 hover:bg-white/10 rounded-full transition-colors">
     <i data-lucide="settings" class="w-5 h-5"></i>
   </button>
 </header>
 
 <!-- ==================== Chat container ==================== -->
-<main id="chatContainer" class="flex-1 overflow-y-auto px-4 py-3 space-y-4">
-  <!-- bubbles get injected here -->
+<main id="chatContainer"
+      class="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+  <!-- Chat bubbles are injected by JavaScript -->
 </main>
 
 <!-- ==================== Input bar (sticky) ==================== -->
 <section class="sticky bottom-0 bg-glass/30 backdrop-blur-xs glass p-3 rounded-t-2xl">
   <form id="msgForm" class="flex space-x-2">
     <input id="msgInput" type="text" placeholder="Ketik pesan…" autocomplete="off"
-      class="flex-1 rounded-xl px-4 py-2 bg-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"
-      required>
-    <button type="submit" class="p-2 rounded-xl bg-purple-600 hover:bg-purple-500 transition-colors">
+           class="flex-1 rounded-xl px-4 py-2 bg-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"
+           required>
+    <button type="submit"
+            class="p-2 rounded-xl bg-purple-600 hover:bg-purple-500 transition-colors">
       <i data-lucide="send" class="w-5 h-5"></i>
     </button>
   </form>
@@ -90,6 +94,7 @@
     <i data-lucide="settings" class="w-5 h-5 mr-2"></i> Settings
   </h2>
 
+  <!-- API key -->
   <div class="mb-6">
     <label for="apiKey" class="block mb-1 font-medium">Groq API Key</label>
     <input id="apiKey" type="password" placeholder="sk-…" autocomplete="off"
@@ -97,6 +102,7 @@
     <p class="text-xs text-gray-400 mt-1">Disimpan hanya di browser (localStorage).</p>
   </div>
 
+  <!-- Statistics -->
   <div class="mb-6">
     <h3 class="font-medium mb-2">Statistik Chat</h3>
     <ul class="text-sm space-y-1">
@@ -123,19 +129,10 @@
   </button>
 </aside>
 
-<!-- Overlay (visible when drawer open) -->
+<!-- Overlay (shown when drawer open) -->
 <div id="drawerOverlay"
      class="fixed inset-0 bg-black/30 hidden z-20"></div>
 
-<!-- ---------- JavaScript ---------- -->
 <script>
-  // ----- inisialisasi ikon Lucide -----
-  lucide.createIcons();
-
-  // ----- const & util -----
-  const STORAGE_KEY = 'vibecheck_history';
-  const API_KEY_STORAGE = 'vibecheck_apiKey';
-  const STAGE_KEY = 'vibecheck_stage';
-
-  const chatContainer = document.getElementById('chatContainer');
-  const msgForm = document.getElementById('msgForm');
+/* --------------------------------------------------------------
+   Semua kode JavaScript berada di dalam DOMContent
