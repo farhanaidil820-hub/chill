@@ -1,149 +1,141 @@
 <!DOCTYPE html>
 <html lang="id" class="dark scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeCheck Chat</title>
+<meta charset="UTF-8">
+<title>VibeCheck Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Tailwind CDN (Play CDN – JIT) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Tailwind configuration – dark mode & custom colours
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            glass: 'rgba(255,255,255,0.07)',
-            'glass-border': 'rgba(255,255,255,0.15)',
-            'purple-indigo': {
-              500: '#7c3aed',
-              600: '#6366f1',
-            },
-          },
-          backdropBlur: {
-            xs: '2px',
+<!-- ---------- Tailwind (Play CDN) ---------- -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          glass: 'rgba(255,255,255,0.07)',
+          'glass-border': 'rgba(255,255,255,0.15)',
+          'purple-indigo': {
+            500: '#7c3aed',
+            600: '#6366f1',
           },
         },
+        backdropBlur: { xs: '2px' },
       },
-    };
-  </script>
+    },
+  };
+</script>
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+<!-- ---------- Lucide Icons ---------- -->
+<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
 
-  <style>
-    /* Glass‑morphism helpers */
-    .glass {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-    .typing-dots {
-      display: inline-block;
-      width: 1.2rem;
-    }
-    .typing-dots span {
-      display: inline-block;
-      width: .3rem;
-      height: .3rem;
-      margin: 0 .07rem;
-      background: #fff;
-      border-radius: 50%;
-      opacity: .4;
-      animation: blink 1.4s infinite;
-    }
-    .typing-dots span:nth-child(2) { animation-delay: .2s; }
-    .typing-dots span:nth-child(3) { animation-delay: .4s; }
-    @keyframes blink {
-      0%, 80% { opacity: .4; }
-      40% { opacity: 1; }
-    }
-  </style>
+<style>
+  /* ----- glass‑morphism helpers ----- */
+  .glass {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .typing-dots span {
+    display: inline-block;
+    width:.3rem;height:.3rem;margin:0 .07rem;background:#fff;
+    border-radius:50%;opacity:.4;animation:b 1.4s infinite;
+  }
+  .typing-dots span:nth-child(2){animation-delay:.2s}
+  .typing-dots span:nth-child(3){animation-delay:.4s}
+  @keyframes b{0%,80%{opacity:.4}40%{opacity:1}}
+</style>
 </head>
 
 <body class="flex flex-col h-screen bg-gradient-to-b from-slate-900 via-violet-900 to-indigo-900 text-white">
 
-  <!-- ==================== Header (iMessage style) ==================== -->
-  <header class="flex items-center justify-between px-4 py-3 bg-glass/30 backdrop-blur-xs glass rounded-b-2xl">
-    <div class="flex items-center space-x-2">
-      <div class="relative">
-        <span class="text-2xl font-semibold">Chloe</span>
-        <span class="absolute -bottom-1 left-0 w-2 h-2 bg-green-500 rounded-full border border-gray-800"></span>
-      </div>
-      <span id="moodBadge" class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-purple-600/30 text-purple-200">
-        Mood: <span id="moodText">Chill</span>
-      </span>
+<!-- ==================== Header (iMessage style) ==================== -->
+<header class="flex items-center justify-between px-4 py-3 bg-glass/30 backdrop-blur-xs glass rounded-b-2xl">
+  <div class="flex items-center space-x-2">
+    <div class="relative">
+      <span class="text-2xl font-semibold">Chloe</span>
+      <span class="absolute -bottom-1 left-0 w-2 h-2 bg-green-500 rounded-full border border-gray-800"></span>
     </div>
+    <span id="moodBadge" class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-purple-600/30 text-purple-200">
+      Mood: <span id="moodText">Chill</span>
+    </span>
+  </div>
+  <button id="openSettingsBtn" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+    <i data-lucide="settings" class="w-5 h-5"></i>
+  </button>
+</header>
 
-    <!-- Settings (drawer trigger) -->
-    <button id="openSettingsBtn" class="p-2 hover:bg-white/10 rounded-full transition-colors">
-      <i data-lucide="settings" class="w-5 h-5"></i>
+<!-- ==================== Chat container ==================== -->
+<main id="chatContainer" class="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+  <!-- bubbles get injected here -->
+</main>
+
+<!-- ==================== Input bar (sticky) ==================== -->
+<section class="sticky bottom-0 bg-glass/30 backdrop-blur-xs glass p-3 rounded-t-2xl">
+  <form id="msgForm" class="flex space-x-2">
+    <input id="msgInput" type="text" placeholder="Ketik pesan…" autocomplete="off"
+      class="flex-1 rounded-xl px-4 py-2 bg-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"
+      required>
+    <button type="submit" class="p-2 rounded-xl bg-purple-600 hover:bg-purple-500 transition-colors">
+      <i data-lucide="send" class="w-5 h-5"></i>
     </button>
-  </header>
+  </form>
+</section>
 
-  <!-- ==================== Chat container ==================== -->
-  <main id="chatContainer" class="flex-1 overflow-y-auto px-4 py-3 space-y-4">
-    <!-- Chat bubbles are injected here by JavaScript -->
-  </main>
+<!-- ==================== Settings Drawer (slide‑over) ==================== -->
+<aside id="settingsDrawer"
+       class="fixed inset-y-0 right-0 w-80 max-w-full bg-glass/50 backdrop-blur-xs glass p-6 overflow-y-auto transform translate-x-full transition-transform duration-300 ease-out z-30">
+  <h2 class="text-xl font-semibold mb-4 flex items-center">
+    <i data-lucide="settings" class="w-5 h-5 mr-2"></i> Settings
+  </h2>
 
-  <!-- ==================== Input bar (sticky) ==================== -->
-  <section class="sticky bottom-0 bg-glass/30 backdrop-blur-xs glass p-3 rounded-t-2xl">
-    <form id="msgForm" class="flex space-x-2">
-      <input id="msgInput" type="text" placeholder="Ketik pesan…" autocomplete="off"
-        class="flex-1 rounded-xl px-4 py-2 bg-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"
-        required>
-      <button type="submit" class="p-2 rounded-xl bg-purple-600 hover:bg-purple-500 transition-colors">
-        <i data-lucide="send" class="w-5 h-5"></i>
-      </button>
-    </form>
-  </section>
+  <div class="mb-6">
+    <label for="apiKey" class="block mb-1 font-medium">Groq API Key</label>
+    <input id="apiKey" type="password" placeholder="sk-…" autocomplete="off"
+           class="w-full rounded-xl px-3 py-2 bg-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400">
+    <p class="text-xs text-gray-400 mt-1">Disimpan hanya di browser (localStorage).</p>
+  </div>
 
-  <!-- ==================== Settings Drawer (slide‑over) ==================== -->
-  <aside id="settingsDrawer"
-    class="fixed inset-y-0 right-[-100%] w-80 bg-glass/50 backdrop-blur-xs glass p-6 overflow-y-auto transition-transform duration-300 ease-out z-30">
-    <h2 class="text-xl font-semibold mb-4 flex items-center">
-      <i data-lucide="settings" class="w-5 h-5 mr-2"></i> Settings
-    </h2>
+  <div class="mb-6">
+    <h3 class="font-medium mb-2">Statistik Chat</h3>
+    <ul class="text-sm space-y-1">
+      <li>Total pesan: <span id="statMsgs">0</span></li>
+      <li>Stage: <span id="statStage">–</span></li>
+      <li>Terakhir aktif: <span id="statLast">–</span></li>
+    </ul>
+  </div>
 
-    <!-- API key input -->
-    <div class="mb-6">
-      <label for="apiKey" class="block mb-1 font-medium">Groq API Key</label>
-      <input id="apiKey" type="password" placeholder="sk-…" autocomplete="off"
-        class="w-full rounded-xl px-3 py-2 bg-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400">
-      <p class="text-xs text-gray-400 mt-1">Key hanya disimpan di browser Anda (localStorage).</p>
-    </div>
-
-    <!-- Chat statistics -->
-    <div class="mb-6">
-      <h3 class="font-medium mb-2">Statistik Chat</h3>
-      <ul class="text-sm space-y-1">
-        <li>Total pesan: <span id="statMsgs">0</span></li>
-        <li>Stage: <span id="statStage">–</span></li>
-        <li>Terakhir aktif: <span id="statLast">–</span></li>
-      </ul>
-    </div>
-
-    <!-- Action buttons -->
-    <div class="flex space-x-2">
-      <button id="saveSettingsBtn"
-        class="flex-1 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 transition-colors">
-        Simpan
-      </button>
-      <button id="clearChatBtn"
-        class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 transition-colors">
-        Hapus Chat
-      </button>
-    </div>
-
-    <!-- Close button -->
-    <button id="closeSettingsBtn"
-      class="absolute top-3 right-3 p-2 hover:bg-white/10 rounded-full transition-colors">
-      <i data-lucide="x" class="w-5 h-5"></i>
+  <div class="flex space-x-2">
+    <button id="saveSettingsBtn"
+            class="flex-1 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 transition-colors">
+      Simpan
     </button>
-  </aside>
+    <button id="clearChatBtn"
+            class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 transition-colors">
+      Hapus Chat
+    </button>
+  </div>
 
-  <!-- Overlay (shown when drawer is open) -->
-  <div id="drawerOverlay"
-    class="fixed inset-0 bg-black/30 hidden z-20"></div
+  <button id="closeSettingsBtn"
+          class="absolute top-3 right-3 p-2 hover:bg-white/10 rounded-full transition-colors">
+    <i data-lucide="x" class="w-5 h-5"></i>
+  </button>
+</aside>
+
+<!-- Overlay (visible when drawer open) -->
+<div id="drawerOverlay"
+     class="fixed inset-0 bg-black/30 hidden z-20"></div>
+
+<!-- ---------- JavaScript ---------- -->
+<script>
+  // ----- inisialisasi ikon Lucide -----
+  lucide.createIcons();
+
+  // ----- const & util -----
+  const STORAGE_KEY = 'vibecheck_history';
+  const API_KEY_STORAGE = 'vibecheck_apiKey';
+  const STAGE_KEY = 'vibecheck_stage';
+
+  const chatContainer = document.getElementById('chatContainer');
+  const msgForm = document.getElementById('msgForm');
